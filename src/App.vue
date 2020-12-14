@@ -1,15 +1,14 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3.0 + Vite" />
+    <SimpleWave />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SimpleWave from "./components/SimpleWave.vue";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    name: "App",
+    components: {
+        SimpleWave,
+    },
+};
 </script>
