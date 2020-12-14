@@ -2,15 +2,15 @@
     <canvas ref="canvas"></canvas>
 </template>
 
-<script>
+<script lang="ts">
     import { defineComponent, onMounted, ref } from 'vue';
 
     export default defineComponent({
         setup() {
-            const canvas = ref(null);
+            const canvas = ref<HTMLCanvasElement>(null);
 
             function drawCurve() {
-                
+
             }
 
             onMounted(() => {
@@ -24,7 +24,7 @@
     });
 </script>
 
-<style>
+<style lang="scss">
     canvas {
         width: 200px;
         height: 200px;
