@@ -9,34 +9,20 @@ enum CurveStyle {
 }
 
 export type Options = {
-    // The DOM container where the DOM canvas element will be added
-    container: HTMLElement;
-    // The style of the wave: `ios` or `ios9`
-    style?: CurveStyle;
-    //  Ratio of the display to use. Calculated by default.
-    ratio?: number;
-    // The speed of the animation.
-    speed?: number;
-    // The amplitude of the complete wave.
-    amplitude?: number;
-    // The frequency for the complete wave (how many waves). - Not available in iOS9 Style
-    frequency?: number;
-    // The color of the wave, in hexadecimal form (`#336699`, `#FF0`). - Not available in iOS9 Style
-    color?: string;
-    // The `canvas` covers the entire width or height of the container.
-    cover?: boolean;
-    // Width of the canvas. Calculated by default.
-    width?: number;
-    // Height of the canvas. Calculated by default.
-    height?: number;
-    // Decide wether start the animation on boot.
-    autostart?: boolean;
-    // Number of step (in pixels) used when drawed on canvas.
-    pixelDepth?: number;
-    // Lerp speed to interpolate properties.
-    lerpSpeed?: number;
-    // Curve definition override
-    curveDefinition?: ICurveDefinition[];
+    container: HTMLElement;                 // The DOM container where the DOM canvas element will be added
+    style?: CurveStyle;                     // The style of the wave: `ios` or `ios9`
+    ratio?: number;                         //  Ratio of the display to use. Calculated by default.
+    speed?: number;                         // The speed of the animation.
+    amplitude?: number;                     // The amplitude of the complete wave.
+    frequency?: number;                     // The frequency for the complete wave (how many waves). - Not available in iOS9 Style
+    color?: string;                         // The color of the wave, in hexadecimal form (`#336699`, `#FF0`). - Not available in iOS9 Style
+    cover?: boolean;                        // The `canvas` covers the entire width or height of the container.
+    width?: number;                         // Width of the canvas. Calculated by default.
+    height?: number;                        // Height of the canvas. Calculated by default.
+    autostart?: boolean;                    // Decide wether start the animation on boot.
+    pixelDepth?: number;                    // Number of step (in pixels) used when drawed on canvas.
+    lerpSpeed?: number;                     // Lerp speed to interpolate properties.
+    curveDefinition?: ICurveDefinition[]    // Curve definition override
 };
 
 export type IiOS9CurveDefinition = {
@@ -58,62 +44,6 @@ export interface ICurve {
     draw: () => void;
 }
 
-/* type CtrlDate = {
-    opt: Options;
-
-    // Phase of the wave (passed to Math.sin function)
-    phase: number;
-    // Boolean value indicating the the animation is running
-    run: boolean;
-    // Curves objects to animate
-    curves: ICurve[];
-
-    speed: number;
-    amplitude: number;
-    width: number;
-    height: number;
-    heightMax: number;
-    color: string;
-    interpolation: {
-        speed: number | null;
-        amplitude: number | null;
-    };
-
-    canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
-
-    animationFrameId: number | undefined;
-    timeoutId: ReturnType<typeof setTimeout> | undefined;
-}
-
-data: CtrlDate = {
-    opt: Options;
-
-    // Phase of the wave (passed to Math.sin function)
-    phase: number = 0;
-    // Boolean value indicating the the animation is running
-    run: boolean = false;
-    // Curves objects to animate
-    curves: ICurve[] = [];
-
-    speed: number;
-    amplitude: number;
-    width: number;
-    height: number;
-    heightMax: number;
-    color: string;
-    interpolation: {
-        speed: number | null;
-        amplitude: number | null;
-    };
-
-    canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
-
-    animationFrameId: number | undefined;
-    timeoutId: ReturnType<typeof setTimeout> | undefined;
-}
- */
 export default class SiriWave {
 
     /**/
@@ -232,13 +162,16 @@ export default class SiriWave {
 
         // Instantiate all curves based on the style
         switch (this.opt.style) {
-            case CurveStyle.ios9:
-                this.curves = ((this.opt.curveDefinition || getDefinition_iOS9()) as IiOS9CurveDefinition[]).map(def => new iOS9Curve(this, def));
+            case CurveStyle.ios9: {
+                const defs = this.opt.curveDefinition  as IiOS9CurveDefinition[] || getDefinition_iOS9();
+                this.curves = defs.map(def => new iOS9Curve(this, def));
                 break;
+            }
             case CurveStyle.ios:
-            default:
-                this.curves = ((this.opt.curveDefinition || getDefinition_Classic()) as IClassicCurveDefinition[]).map(def => new ClassicCurve(this, def));
-                break;
+            default: {
+                const defs = this.opt.curveDefinition as IClassicCurveDefinition[] || getDefinition_Classic();
+                this.curves = defs.map(def => new ClassicCurve(this, def));
+            }
         }
 
         // Attach to the container
@@ -253,15 +186,15 @@ export default class SiriWave {
     /**
      * Interpolate a property to the value found in this.interpolation
      */
-    private lerp(propertyStr: "amplitude" | "speed"): number | null {
-        const prop = this.interpolation[propertyStr];
+    private lerp(propName: "amplitude" | "speed"): number | null {
+        const prop = this.interpolation[propName];
         if (prop !== null) {
-            this[propertyStr] = intLerp(this[propertyStr], prop, this.opt.lerpSpeed!);
-            if (this[propertyStr] - prop === 0) {
-                this.interpolation[propertyStr] = null;
+            this[propName] = intLerp(this[propName], prop, this.opt.lerpSpeed!);
+            if (this[propName] - prop === 0) {
+                this.interpolation[propName] = null;
             }
         }
-        return this[propertyStr];
+        return this[propName];
     }
 
     /**
@@ -331,8 +264,8 @@ export default class SiriWave {
     /**
      * Set a new value for a property (interpolated)
      */
-    public set(propertyStr: "amplitude" | "speed", value: number) {
-        this.interpolation[propertyStr] = value;
+    public set(propName: "amplitude" | "speed", value: number) {
+        this.interpolation[propName] = value;
     }
 
     /**
