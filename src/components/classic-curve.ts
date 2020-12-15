@@ -26,7 +26,7 @@ export class ClassicCurve implements ICurve {
             (this.globalAttFn(i) *
                 (this.ctrl.heightMax * this.ctrl.amplitude) *
                 (1 / this.definition.attenuation) *
-                Math.sin(this.ctrl.opt.frequency! * i - this.ctrl.phase))
+                Math.sin(this.ctrl.optEnv.frequency! * i - this.ctrl.phase))
         );
     }
 
@@ -41,7 +41,7 @@ export class ClassicCurve implements ICurve {
         ctx.lineWidth = this.definition.lineWidth;
 
         // Cycle the graph from -X to +X every PX_DEPTH and draw the line
-        for (let i = -this.GRAPH_X; i <= this.GRAPH_X; i += this.ctrl.opt.pixelDepth!) {
+        for (let i = -this.GRAPH_X; i <= this.GRAPH_X; i += this.ctrl.optEnv.pixelDepth!) {
             ctx.lineTo(this._xpos(i), this.ctrl.heightMax + this._ypos(i));
         }
 

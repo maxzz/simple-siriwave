@@ -14,16 +14,19 @@ export type Options = {
     ratio?: number;                         //  Ratio of the display to use. Calculated by default.
     speed?: number;                         // The speed of the animation.
     amplitude?: number;                     // The amplitude of the complete wave.
-    frequency?: number;                     // The frequency for the complete wave (how many waves). - Not available in iOS9 Style
     color?: string;                         // The color of the wave, in hexadecimal form (`#336699`, `#FF0`). - Not available in iOS9 Style
     cover?: boolean;                        // The `canvas` covers the entire width or height of the container.
     width?: number;                         // Width of the canvas. Calculated by default.
     height?: number;                        // Height of the canvas. Calculated by default.
     autostart?: boolean;                    // Decide wether start the animation on boot.
-    pixelDepth?: number;                    // Number of step (in pixels) used when drawed on canvas.
     lerpSpeed?: number;                     // Lerp speed to interpolate properties.
     curveDefinition?: ICurveDefinition[]    // Curve definition override
 };
+
+export type OptionsEnv = {
+    frequency?: number;                     // The frequency for the complete wave (how many waves). - Not available in iOS9 Style
+    pixelDepth?: number;                    // Number of step (in pixels) used when drawed on canvas.
+}
 
 export type IiOS9CurveDefinition = {
     supportLine?: boolean;
@@ -47,7 +50,8 @@ export interface ICurve {
 export default class SiriWave {
 
     /**/
-    public opt: Options;
+    private opt: Options;
+    public optEnv: OptionsEnv;
 
     // Phase of the wave (passed to Math.sin function)
     public phase: number = 0;
@@ -84,15 +88,19 @@ export default class SiriWave {
             ratio: window.devicePixelRatio || 1,
             speed: 0.2,
             amplitude: 1,
-            frequency: 6,
+            
             color: "#fff",
             cover: false,
             width: parseInt(csStyle.width.replace("px", ""), 10),
             height: parseInt(csStyle.height.replace("px", ""), 10),
             autostart: true,
-            pixelDepth: 0.02,
             lerpSpeed: 0.1,
             ...rest,
+        };
+
+        this.optEnv = {
+            frequency: 6,
+            pixelDepth: 0.02,
         };
 
         /**

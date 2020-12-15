@@ -180,7 +180,7 @@ export class iOS9Curve implements ICurve {
         for (const sign of [1, -1]) {
             ctx.beginPath();
 
-            for (let i = -this.GRAPH_X; i <= this.GRAPH_X; i += this.ctrl.opt.pixelDepth!) {
+            for (let i = -this.GRAPH_X; i <= this.GRAPH_X; i += this.ctrl.optEnv.pixelDepth!) {
                 const x = this._xpos(i);
                 const y = this._ypos(i);
                 ctx.lineTo(x, this.ctrl.heightMax - sign * y);
