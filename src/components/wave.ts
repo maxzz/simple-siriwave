@@ -133,7 +133,7 @@ export default class SiriWave {
         /**
          * Color of the wave (used in Classic iOS)
          */
-        this.color = `rgb(${this.hex2rgb(this.opt.color!)})`;
+        this.color = `rgb(${hex2rgb(this.opt.color!)})`;
 
         /**
          * An object containing controller variables that need to be interpolated
@@ -173,16 +173,11 @@ export default class SiriWave {
         // Instantiate all curves based on the style
         switch (this.opt.style) {
             case CurveStyle.ios9:
-                this.curves = ((this.opt.curveDefinition || iOS9Curve.getDefinition()) as IiOS9CurveDefinition[]).map(
-                    (def) => new iOS9Curve(this, def),
-                );
+                this.curves = ((this.opt.curveDefinition || iOS9Curve.getDefinition()) as IiOS9CurveDefinition[]).map(def => new iOS9Curve(this, def));
                 break;
-
             case CurveStyle.ios:
             default:
-                this.curves = ((this.opt.curveDefinition || ClassicCurve.getDefinition()) as IClassicCurveDefinition[]).map(
-                    (def) => new ClassicCurve(this, def),
-                );
+                this.curves = ((this.opt.curveDefinition || ClassicCurve.getDefinition()) as IClassicCurveDefinition[]).map(def => new ClassicCurve(this, def));
                 break;
         }
 
@@ -196,31 +191,12 @@ export default class SiriWave {
     }
 
     /**
-     * Convert an HEX color to RGB
-     */
-    hex2rgb(hex: string): string | null {
-        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-        hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result
-            ? `${parseInt(result[1], 16).toString()},${parseInt(result[2], 16).toString()},${parseInt(
-                result[3],
-                16,
-            ).toString()}`
-            : null;
-    }
-
-    intLerp(v0: number, v1: number, t: number): number {
-        return v0 * (1 - t) + v1 * t;
-    }
-
-    /**
      * Interpolate a property to the value found in this.interpolation
      */
-    lerp(propertyStr: "amplitude" | "speed"): number | null {
+    private lerp(propertyStr: "amplitude" | "speed"): number | null {
         const prop = this.interpolation[propertyStr];
         if (prop !== null) {
-            this[propertyStr] = this.intLerp(this[propertyStr], prop, this.opt.lerpSpeed!);
+            this[propertyStr] = intLerp(this[propertyStr], prop, this.opt.lerpSpeed!);
             if (this[propertyStr] - prop === 0) {
                 this.interpolation[propertyStr] = null;
             }
@@ -231,7 +207,7 @@ export default class SiriWave {
     /**
      * Clear the canvas
      */
-    _clear() {
+    private _clear() {
         this.ctx.globalCompositeOperation = "destination-out";
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.globalCompositeOperation = "source-over";
@@ -240,7 +216,7 @@ export default class SiriWave {
     /**
      * Draw all curves
      */
-    _draw() {
+    private _draw() {
         this.curves.forEach((curve) => curve.draw());
     }
 
@@ -248,7 +224,7 @@ export default class SiriWave {
      * Clear the space, interpolate values, calculate new steps and draws
      * @returns
      */
-    startDrawCycle() {
+    private startDrawCycle() {
         this._clear();
 
         // Interpolate values
@@ -270,7 +246,7 @@ export default class SiriWave {
     /**
      * Start the animation
      */
-    start() {
+    public start() {
         this.phase = 0;
 
         // Ensure we don't re-launch the draw cycle
@@ -283,7 +259,7 @@ export default class SiriWave {
     /**
      * Stop the animation
      */
-    stop() {
+    public stop() {
         this.phase = 0;
         this.run = false;
 
@@ -295,21 +271,35 @@ export default class SiriWave {
     /**
      * Set a new value for a property (interpolated)
      */
-    set(propertyStr: "amplitude" | "speed", value: number) {
+    public set(propertyStr: "amplitude" | "speed", value: number) {
         this.interpolation[propertyStr] = value;
     }
 
     /**
      * Set a new value for the speed property (interpolated)
      */
-    setSpeed(value: number) {
+    public setSpeed(value: number) {
         this.set("speed", value);
     }
 
     /**
      * Set a new value for the amplitude property (interpolated)
      */
-    setAmplitude(value: number) {
+    public setAmplitude(value: number) {
         this.set("amplitude", value);
     }
+}
+
+/**
+ * Convert an HEX color to RGB
+ */
+function hex2rgb(hex: string): string | null {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? `${parseInt(result[1], 16).toString()}, ${parseInt(result[2], 16).toString()}, ${parseInt(result[3], 16).toString()}` : null;
+}
+
+function intLerp(v0: number, v1: number, t: number): number {
+    return v0 * (1 - t) + v1 * t;
 }

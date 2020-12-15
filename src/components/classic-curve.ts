@@ -1,4 +1,5 @@
 import SiriWave, { IClassicCurveDefinition, ICurve } from "./wave";
+
 export class ClassicCurve implements ICurve {
     ctrl: SiriWave;
     definition: IClassicCurveDefinition;
@@ -11,15 +12,15 @@ export class ClassicCurve implements ICurve {
         this.definition = definition;
     }
 
-    globalAttFn(x: number): number {
+    private globalAttFn(x: number): number {
         return Math.pow(this.ATT_FACTOR / (this.ATT_FACTOR + Math.pow(x, this.ATT_FACTOR)), this.ATT_FACTOR);
     }
 
-    _xpos(i: number): number {
+    private _xpos(i: number): number {
         return this.ctrl.width * ((i + this.GRAPH_X) / (this.GRAPH_X * 2));
     }
 
-    _ypos(i: number): number {
+    private _ypos(i: number): number {
         return (
             this.AMPLITUDE_FACTOR *
             (this.globalAttFn(i) *
@@ -29,7 +30,7 @@ export class ClassicCurve implements ICurve {
         );
     }
 
-    draw(): void {
+    public draw(): void {
         const { ctx } = this.ctrl;
 
         ctx.moveTo(0, 0);
@@ -47,7 +48,7 @@ export class ClassicCurve implements ICurve {
         ctx.stroke();
     }
 
-    static getDefinition(): IClassicCurveDefinition[] {
+    public static getDefinition(): IClassicCurveDefinition[] {
         return [
             {
                 attenuation: -2,

@@ -52,11 +52,11 @@ export class iOS9Curve implements ICurve {
         this.respawn();
     }
 
-    getRandomRange(e: [number, number]): number {
+    private getRandomRange(e: [number, number]): number {
         return e[0] + Math.random() * (e[1] - e[0]);
     }
 
-    respawnSingle(ci: number): void {
+    private respawnSingle(ci: number): void {
         this.phases[ci] = 0;
         this.amplitudes[ci] = 0;
 
@@ -68,11 +68,11 @@ export class iOS9Curve implements ICurve {
         this.verses[ci] = this.getRandomRange([-1, 1]);
     }
 
-    getEmptyArray(count: number): number[] {
+    private getEmptyArray(count: number): number[] {
         return new Array(count);
     }
 
-    respawn(): void {
+    private respawn(): void {
         this.spawnAt = Date.now();
 
         this.noOfCurves = Math.floor(this.getRandomRange(this.NOOFCURVES_RANGES));
@@ -91,20 +91,20 @@ export class iOS9Curve implements ICurve {
         }
     }
 
-    globalAttFn(x: number): number {
+    private globalAttFn(x: number): number {
         return Math.pow(this.ATT_FACTOR / (this.ATT_FACTOR + Math.pow(x, 2)), this.ATT_FACTOR);
     }
 
-    sin(x: number, phase: number): number {
+    private sin(x: number, phase: number): number {
         return Math.sin(x - phase);
     }
 
-    _grad(x: number, a: number, b: number): number {
+    private _grad(x: number, a: number, b: number): number {
         if (x > a && x < b) return 1;
         return 1;
     }
 
-    yRelativePos(i: number): number {
+    private yRelativePos(i: number): number {
         let y = 0;
 
         for (let ci = 0; ci < this.noOfCurves; ci++) {
@@ -123,7 +123,7 @@ export class iOS9Curve implements ICurve {
         return y / this.noOfCurves;
     }
 
-    _ypos(i: number): number {
+    private _ypos(i: number): number {
         return (
             this.AMPLITUDE_FACTOR *
             this.ctrl.heightMax *
@@ -133,11 +133,11 @@ export class iOS9Curve implements ICurve {
         );
     }
 
-    _xpos(i: number): number {
+    private _xpos(i: number): number {
         return this.ctrl.width * ((i + this.GRAPH_X) / (this.GRAPH_X * 2));
     }
 
-    drawSupportLine() {
+    private drawSupportLine() {
         const { ctx } = this.ctrl;
 
         const coo: [number, number, number, number] = [0, this.ctrl.heightMax, this.ctrl.width, 1];
@@ -151,7 +151,7 @@ export class iOS9Curve implements ICurve {
         ctx.fillRect.apply(ctx, coo);
     }
 
-    draw() {
+    public draw() {
         const { ctx } = this.ctrl;
 
         ctx.globalAlpha = 0.7;
@@ -205,7 +205,7 @@ export class iOS9Curve implements ICurve {
         return null;
     }
 
-    static getDefinition(): IiOS9CurveDefinition[] {
+    public static getDefinition(): IiOS9CurveDefinition[] {
         return [
             {
                 color: "255,255,255",
