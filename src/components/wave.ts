@@ -117,31 +117,31 @@ data: CtrlDate = {
 export default class SiriWave {
 
     /**/
-    opt: Options;
+    public opt: Options;
 
     // Phase of the wave (passed to Math.sin function)
-    phase: number = 0;
+    public phase: number = 0;
     // Boolean value indicating the the animation is running
-    run: boolean = false;
+    private run: boolean = false;
     // Curves objects to animate
-    curves: ICurve[] = [];
+    private curves: ICurve[] = [];
 
-    speed: number;
-    amplitude: number;
-    width: number;
-    height: number;
-    heightMax: number;
-    color: string;
-    interpolation: {
+    public speed: number;
+    public amplitude: number;
+    public width: number;
+    private height: number;
+    public heightMax: number;
+    public color: string;
+    private interpolation: {
         speed: number | null;
         amplitude: number | null;
     };
 
-    canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement;
+    public ctx: CanvasRenderingContext2D;
 
-    animationFrameId: number | undefined;
-    timeoutId: ReturnType<typeof setTimeout> | undefined;
+    private animationFrameId: number | undefined;
+    private timeoutId: ReturnType<typeof setTimeout> | undefined;
     /**/
 
 
