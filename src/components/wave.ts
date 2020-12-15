@@ -53,25 +53,25 @@ export default class SiriWave {
 
     /**/
     private opt: Options;
-    public optEnv: OptionsEnv; // TBD: later combine it back in options to allow user changes it as part of options?
+    public optEnv: OptionsEnv;      // These options are exposed to workers.
 
     public phase: number = 0;       // Phase of the wave (passed to Math.sin function)
     private run: boolean = false;   // Boolean value indicating the the animation is running
     private curves: ICurve[] = [];  // Curves objects to animate
 
-    public speed: number;
-    public amplitude: number;
-    public width: number;
-    private height: number;
-    public heightMax: number;
-    public color: string;
-    private interpolation: {
+    public speed: number;           // Actual speed of the animation. Is not safe to change this value directly, use `setSpeed` instead.
+    public amplitude: number;       // Actual amplitude of the animation. Is not safe to change this value directly, use `setAmplitude` instead.
+    public width: number;           // Width of the canvas multiplied by pixel ratio
+    private height: number;         // Height of the canvas multiplied by pixel ratio
+    public heightMax: number;       // Maximum height for a single wave
+    public color: string;           // Color of the wave (used in Classic iOS)
+    private interpolation: {        // An object containing controller variables that need to be interpolated to an another value before to be actually changed
         speed: number | null;
         amplitude: number | null;
     };
 
-    private canvas: HTMLCanvasElement;
-    public ctx: CanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement;      // Canvas DOM Element where curves will be drawn
+    public ctx: CanvasRenderingContext2D;   //2D Context from Canvas
 
     private animationFrameId: number | undefined;
     private timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -103,70 +103,27 @@ export default class SiriWave {
             pixelDepth: this.opt.pixelDepth,
         };
 
-        /**
-         * Actual speed of the animation. Is not safe to change this value directly, use `setSpeed` instead.
-         */
         this.speed = Number(this.opt.speed);
-
-        /**
-         * Actual amplitude of the animation. Is not safe to change this value directly, use `setAmplitude` instead.
-         */
         this.amplitude = Number(this.opt.amplitude);
-
-        /**
-         * Width of the canvas multiplied by pixel ratio
-         */
         this.width = Number(this.opt.ratio! * this.opt.width!);
-
-        /**
-         * Height of the canvas multiplied by pixel ratio
-         */
         this.height = Number(this.opt.ratio! * this.opt.height!);
-
-        /**
-         * Maximum height for a single wave
-         */
         this.heightMax = Number(this.height / 2) - 6;
-
-        /**
-         * Color of the wave (used in Classic iOS)
-         */
         this.color = `rgb(${hex2rgb(this.opt.color!)})`;
 
-        /**
-         * An object containing controller variables that need to be interpolated
-         * to an another value before to be actually changed
-         */
         this.interpolation = {
             speed: this.speed,
             amplitude: this.amplitude,
         };
 
-        /**
-         * Canvas DOM Element where curves will be drawn
-         */
         this.canvas = document.createElement("canvas");
 
-        /**
-         * 2D Context from Canvas
-         */
         const ctx = this.canvas.getContext("2d");
         if (ctx === null) {
             throw new Error("Unable to create 2D Context");
         }
         this.ctx = ctx;
 
-        // Set dimensions
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-
-        // By covering, we ensure the canvas is in the same size of the parent
-        if (this.opt.cover === true) {
-            this.canvas.style.width = this.canvas.style.height = "100%";
-        } else {
-            this.canvas.style.width = `${this.width / this.opt.ratio!}px`;
-            this.canvas.style.height = `${this.height / this.opt.ratio!}px`;
-        }
+        this.resize(this.width, this.height);
 
         // Instantiate all curves based on the style
         switch (this.opt.style) {
@@ -188,6 +145,27 @@ export default class SiriWave {
         // Start the animation
         if (this.opt.autostart) {
             this.start();
+        }
+    }
+
+    public resize(width: number, height: number) {
+        // yak:
+        this.width = width;
+        this.height = height;
+        this.heightMax = Number(this.height / 2) - 6;
+        // this.width = Number(this.opt.ratio! * width);
+        // this.height = Number(this.opt.ratio! * height);
+
+        // Set dimensions
+        this.canvas.width = width;
+        this.canvas.height = height;
+
+        // By covering, we ensure the canvas is in the same size of the parent
+        if (this.opt.cover === true) {
+            this.canvas.style.width = this.canvas.style.height = "100%";
+        } else {
+            this.canvas.style.width = `${this.width / this.opt.ratio!}px`;
+            this.canvas.style.height = `${this.height / this.opt.ratio!}px`;
         }
     }
 
