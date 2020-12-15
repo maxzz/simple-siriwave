@@ -14,11 +14,13 @@ export type Options = {
     ratio?: number;                         //  Ratio of the display to use. Calculated by default.
     speed?: number;                         // The speed of the animation.
     amplitude?: number;                     // The amplitude of the complete wave.
+    frequency?: number;                     // The frequency for the complete wave (how many waves). - Not available in iOS9 Style
     color?: string;                         // The color of the wave, in hexadecimal form (`#336699`, `#FF0`). - Not available in iOS9 Style
     cover?: boolean;                        // The `canvas` covers the entire width or height of the container.
     width?: number;                         // Width of the canvas. Calculated by default.
     height?: number;                        // Height of the canvas. Calculated by default.
     autostart?: boolean;                    // Decide wether start the animation on boot.
+    pixelDepth?: number;                    // Number of step (in pixels) used when drawed on canvas.
     lerpSpeed?: number;                     // Lerp speed to interpolate properties.
     curveDefinition?: ICurveDefinition[]    // Curve definition override
 };
@@ -51,14 +53,11 @@ export default class SiriWave {
 
     /**/
     private opt: Options;
-    public optEnv: OptionsEnv;
+    public optEnv: OptionsEnv; // TBD: later combine it back in options to allow user changes it as part of options?
 
-    // Phase of the wave (passed to Math.sin function)
-    public phase: number = 0;
-    // Boolean value indicating the the animation is running
-    private run: boolean = false;
-    // Curves objects to animate
-    private curves: ICurve[] = [];
+    public phase: number = 0;       // Phase of the wave (passed to Math.sin function)
+    private run: boolean = false;   // Boolean value indicating the the animation is running
+    private curves: ICurve[] = [];  // Curves objects to animate
 
     public speed: number;
     public amplitude: number;
@@ -88,19 +87,20 @@ export default class SiriWave {
             ratio: window.devicePixelRatio || 1,
             speed: 0.2,
             amplitude: 1,
-            
+            frequency: 6,
             color: "#fff",
             cover: false,
             width: parseInt(csStyle.width.replace("px", ""), 10),
             height: parseInt(csStyle.height.replace("px", ""), 10),
             autostart: true,
+            pixelDepth: 0.02,
             lerpSpeed: 0.1,
             ...rest,
         };
 
         this.optEnv = {
-            frequency: 6,
-            pixelDepth: 0.02,
+            frequency: this.opt.frequency,
+            pixelDepth: this.opt.pixelDepth,
         };
 
         /**
