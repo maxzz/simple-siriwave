@@ -1,7 +1,9 @@
 <template>
-    <canvas ref="canvas"></canvas>
     <div ref="siriHolder" class="siri-holder"></div>
-    <input type="button" value="run" @click="onRunClick">
+    <div>
+        <input type="button" value="run" @click="onRunClick">
+    </div>
+    <canvas ref="canvas" class=siri-test></canvas>
 </template>
 
 <script lang="ts">
@@ -25,10 +27,13 @@
                 siriWave = new SiriWave({
                     container: siriHolder.value,
                     width: 340,
-                    height: 200,
+                    height: 120,
                     color: '#777',
+                    cover: true,
                     autostart: false,
                 });
+                siriWave.start();
+                siriWave.stop();
             });
 
             function onRunClick() {
@@ -51,7 +56,7 @@
 </script>
 
 <style lang="scss">
-    canvas {
+    .siri-test {
         width: 200px;
         height: 200px;
         border: 1px solid red;
