@@ -123,7 +123,7 @@ export default class SiriWave {
         }
         this.ctx = ctx;
 
-        this.resize(this.width, this.height);
+        this._resize(this.width, this.height);
 
         // Instantiate all curves based on the style
         switch (this.opt.style) {
@@ -148,11 +148,12 @@ export default class SiriWave {
         }
     }
 
-    public resize(width: number, height: number) {
+    private _resize(width: number, height: number) {
         // yak:
-        this.width = width;
-        this.height = height;
-        this.heightMax = Number(this.height / 2) - 6;
+        // this.width = width;
+        // this.height = height;
+        // this.heightMax = Number(this.height / 2) - 6;
+
         // this.width = Number(this.opt.ratio! * width);
         // this.height = Number(this.opt.ratio! * height);
 
