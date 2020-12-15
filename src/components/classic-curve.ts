@@ -47,34 +47,34 @@ export class ClassicCurve implements ICurve {
 
         ctx.stroke();
     }
+}
 
-    public static getDefinition(): IClassicCurveDefinition[] {
-        return [
-            {
-                attenuation: -2,
-                lineWidth: 1,
-                opacity: 0.1,
-            },
-            {
-                attenuation: -6,
-                lineWidth: 1,
-                opacity: 0.2,
-            },
-            {
-                attenuation: 4,
-                lineWidth: 1,
-                opacity: 0.4,
-            },
-            {
-                attenuation: 2,
-                lineWidth: 1,
-                opacity: 0.6,
-            },
-            {
-                attenuation: 1,
-                lineWidth: 1.5,
-                opacity: 1,
-            },
-        ];
-    }
+export function getDefinition_Classic(): IClassicCurveDefinition[] {
+    return [
+        {
+            attenuation: -2,
+            lineWidth: 1,
+            opacity: 0.1,
+        },
+        {
+            attenuation: -6,
+            lineWidth: 1,
+            opacity: 0.2,
+        },
+        {
+            attenuation: 4,
+            lineWidth: 1,
+            opacity: 0.4,
+        },
+        {
+            attenuation: 2,
+            lineWidth: 1,
+            opacity: 0.6,
+        },
+        {
+            attenuation: 1,
+            lineWidth: 1.5,
+            opacity: 1,
+        },
+    ];
 }

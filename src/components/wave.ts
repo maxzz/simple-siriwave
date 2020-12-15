@@ -1,7 +1,7 @@
 //#region old definitions
 
-import { ClassicCurve } from "./classic-curve";
-import { iOS9Curve } from "./ios9-curve";
+import { ClassicCurve, getDefinition_Classic } from "./classic-curve";
+import { getDefinition_iOS9, iOS9Curve } from "./ios9-curve";
 
 enum CurveStyle {
     "ios" = "ios",
@@ -58,7 +58,35 @@ export interface ICurve {
     draw: () => void;
 }
 
-export default class SiriWave {
+/* type CtrlDate = {
+    opt: Options;
+
+    // Phase of the wave (passed to Math.sin function)
+    phase: number;
+    // Boolean value indicating the the animation is running
+    run: boolean;
+    // Curves objects to animate
+    curves: ICurve[];
+
+    speed: number;
+    amplitude: number;
+    width: number;
+    height: number;
+    heightMax: number;
+    color: string;
+    interpolation: {
+        speed: number | null;
+        amplitude: number | null;
+    };
+
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+
+    animationFrameId: number | undefined;
+    timeoutId: ReturnType<typeof setTimeout> | undefined;
+}
+
+data: CtrlDate = {
     opt: Options;
 
     // Phase of the wave (passed to Math.sin function)
@@ -84,6 +112,38 @@ export default class SiriWave {
 
     animationFrameId: number | undefined;
     timeoutId: ReturnType<typeof setTimeout> | undefined;
+}
+ */
+export default class SiriWave {
+
+    /**/
+    opt: Options;
+
+    // Phase of the wave (passed to Math.sin function)
+    phase: number = 0;
+    // Boolean value indicating the the animation is running
+    run: boolean = false;
+    // Curves objects to animate
+    curves: ICurve[] = [];
+
+    speed: number;
+    amplitude: number;
+    width: number;
+    height: number;
+    heightMax: number;
+    color: string;
+    interpolation: {
+        speed: number | null;
+        amplitude: number | null;
+    };
+
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+
+    animationFrameId: number | undefined;
+    timeoutId: ReturnType<typeof setTimeout> | undefined;
+    /**/
+
 
     constructor({ container, ...rest }: Options) {
         const csStyle = window.getComputedStyle(container);
@@ -173,11 +233,11 @@ export default class SiriWave {
         // Instantiate all curves based on the style
         switch (this.opt.style) {
             case CurveStyle.ios9:
-                this.curves = ((this.opt.curveDefinition || iOS9Curve.getDefinition()) as IiOS9CurveDefinition[]).map(def => new iOS9Curve(this, def));
+                this.curves = ((this.opt.curveDefinition || getDefinition_iOS9()) as IiOS9CurveDefinition[]).map(def => new iOS9Curve(this, def));
                 break;
             case CurveStyle.ios:
             default:
-                this.curves = ((this.opt.curveDefinition || ClassicCurve.getDefinition()) as IClassicCurveDefinition[]).map(def => new ClassicCurve(this, def));
+                this.curves = ((this.opt.curveDefinition || getDefinition_Classic()) as IClassicCurveDefinition[]).map(def => new ClassicCurve(this, def));
                 break;
         }
 

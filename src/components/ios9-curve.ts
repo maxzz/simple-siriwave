@@ -204,25 +204,25 @@ export class iOS9Curve implements ICurve {
 
         return null;
     }
+}
 
-    public static getDefinition(): IiOS9CurveDefinition[] {
-        return [
-            {
-                color: "255,255,255",
-                supportLine: true,
-            },
-            {
-                // blue
-                color: "15, 82, 169",
-            },
-            {
-                // red
-                color: "173, 57, 76",
-            },
-            {
-                // green
-                color: "48, 220, 155",
-            },
-        ];
-    }
+export function getDefinition_iOS9(): IiOS9CurveDefinition[] {
+    return [
+        {
+            color: "255,255,255",
+            supportLine: true,
+        },
+        {
+            // blue
+            color: "15, 82, 169",
+        },
+        {
+            // red
+            color: "173, 57, 76",
+        },
+        {
+            // green
+            color: "48, 220, 155",
+        },
+    ];
 }
