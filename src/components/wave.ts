@@ -56,7 +56,7 @@ export default class SiriWave {
     public optEnv: OptionsEnv;      // These options are exposed to workers.
 
     public phase: number = 0;       // Phase of the wave (passed to Math.sin function)
-    private run: boolean = false;   // Boolean value indicating the the animation is running
+    public run: boolean = false;    // Boolean value indicating the the animation is running
     private curves: ICurve[] = [];  // Curves objects to animate
 
     public speed: number;           // Actual speed of the animation. Is not safe to change this value directly, use `setSpeed` instead.
