@@ -14,16 +14,10 @@
         setup() {
             const canvas = ref<HTMLCanvasElement>(null);
 
-            function drawCurve() {
-
-            }
-
             const siriHolder = ref<HTMLElement>(null);
             let siriWave = null;
 
             onMounted(() => {
-                console.log({canvas});
-
                 siriWave = new SiriWave({
                     container: siriHolder.value,
                     width: 340,
@@ -32,17 +26,16 @@
                     cover: true,
                     autostart: false,
                 });
+
                 siriWave.start();
                 siriWave.stop();
             });
 
             function onRunClick() {
-                if (siriWave) {
-                    if (siriWave.run) {
-                        siriWave.stop();
-                    } else {
-                        siriWave.start();
-                    }
+                if (siriWave.run) {
+                    siriWave.stop();
+                } else {
+                    siriWave.start();
                 }
             }
 

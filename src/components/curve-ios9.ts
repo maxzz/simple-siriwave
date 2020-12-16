@@ -1,6 +1,6 @@
-import SiriWave, { ICurve, IiOS9CurveDefinition } from "./wave";
+import SiriWave, { ICurve, IiOS9CurveDefinition } from "./curve";
 
-export class iOS9Curve implements ICurve {
+export class CurveIOs9 implements ICurve {
     ctrl: SiriWave;
     definition: IiOS9CurveDefinition;
 

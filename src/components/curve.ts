@@ -1,7 +1,7 @@
 //#region old definitions
 
-import { ClassicCurve, getDefinition_Classic } from "./classic-curve";
-import { getDefinition_iOS9, iOS9Curve } from "./ios9-curve";
+import { ClassicCurve as CurveClassic, getDefinition_Classic } from "./curve-classic";
+import { CurveIOs9, getDefinition_iOS9 } from "./curve-ios9";
 
 enum CurveStyle {
     "ios" = "ios",
@@ -129,13 +129,13 @@ export default class SiriWave {
         switch (this.opt.style) {
             case CurveStyle.ios9: {
                 const defs = this.opt.curveDefinition  as IiOS9CurveDefinition[] || getDefinition_iOS9();
-                this.curves = defs.map(def => new iOS9Curve(this, def));
+                this.curves = defs.map(def => new CurveIOs9(this, def));
                 break;
             }
             case CurveStyle.ios:
             default: {
                 const defs = this.opt.curveDefinition as IClassicCurveDefinition[] || getDefinition_Classic();
-                this.curves = defs.map(def => new ClassicCurve(this, def));
+                this.curves = defs.map(def => new CurveClassic(this, def));
             }
         }
 

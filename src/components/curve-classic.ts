@@ -1,4 +1,4 @@
-import SiriWave, { IClassicCurveDefinition, ICurve } from "./wave";
+import SiriWave, { IClassicCurveDefinition, ICurve } from "./curve";
 
 export class ClassicCurve implements ICurve {
     ctrl: SiriWave;
