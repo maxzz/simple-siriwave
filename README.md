@@ -9,7 +9,7 @@ This project is a simple wrapper for the [siriwave.js](https://github.com/kopiro
 Limitations found:
 
 * These controls cannot share a common canvas, i.e. each control uses its own canvas instance.
-* The control is not aware of parant element resizing.
+* The control is not aware of parent element resizing.
 
 ## Thanks
 

@@ -1,6 +1,6 @@
 {
     "name": "simple-siriwave",
-    "description": "as refactoring practice",
+    "description": "This is a refactoring and embedding practice.",
     "version": "0.0.0",
     "scripts": {
         "dev": "vite",
