@@ -3,17 +3,14 @@
     <div>
         <input type="button" value="run" @click="onRunClick">
     </div>
-    <canvas ref="canvas" class=siri-test></canvas>
 </template>
 
 <script lang="ts">
     import { defineComponent, onMounted, ref } from 'vue';
-    import SiriWave from './wave';
+    import SiriWave from './curve/curve';
 
     export default defineComponent({
         setup() {
-            const canvas = ref<HTMLCanvasElement>(null);
-
             const siriHolder = ref<HTMLElement>(null);
             let siriWave = null;
 
@@ -40,7 +37,6 @@
             }
 
             return {
-                canvas,
                 siriHolder,
                 onRunClick,
             };
@@ -49,11 +45,6 @@
 </script>
 
 <style lang="scss">
-    .siri-test {
-        width: 200px;
-        height: 200px;
-        border: 1px solid red;
-    }
     .siri-holder {
         // width: 600px;
         // height: 300px;

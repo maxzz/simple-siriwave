@@ -1,10 +1,10 @@
-//#region old definitions
+//#region definitions
 
-import { ClassicCurve as CurveClassic, getDefinition_Classic } from "./curve-classic";
-import { CurveIOs9, getDefinition_iOS9 } from "./curve-ios9";
+import { Curve_ios8, getDefaultCurves as getDefaultCurves_ios8 } from "./icurve-ios8";
+import { Curve_ios9, getDefaultCurves as getDefaultCurves_ios9 } from "./icurve-ios9";
 
 enum CurveStyle {
-    "ios" = "ios",
+    "ios" = "ios", // as classic curve view i.e. before ios9
     "ios9" = "ios9",
 }
 
@@ -43,7 +43,7 @@ export type IClassicCurveDefinition = {
 
 export type ICurveDefinition = IiOS9CurveDefinition | IClassicCurveDefinition;
 
-//#endregion old definitions
+//#endregion definitions
 
 export interface ICurve {
     draw: () => void;
@@ -128,14 +128,14 @@ export default class SiriWave {
         // Instantiate all curves based on the style
         switch (this.opt.style) {
             case CurveStyle.ios9: {
-                const defs = this.opt.curveDefinition  as IiOS9CurveDefinition[] || getDefinition_iOS9();
-                this.curves = defs.map(def => new CurveIOs9(this, def));
+                const defs = this.opt.curveDefinition  as IiOS9CurveDefinition[] || getDefaultCurves_ios9();
+                this.curves = defs.map(def => new Curve_ios9(this, def));
                 break;
             }
             case CurveStyle.ios:
             default: {
-                const defs = this.opt.curveDefinition as IClassicCurveDefinition[] || getDefinition_Classic();
-                this.curves = defs.map(def => new CurveClassic(this, def));
+                const defs = this.opt.curveDefinition as IClassicCurveDefinition[] || getDefaultCurves_ios8();
+                this.curves = defs.map(def => new Curve_ios8(this, def));
             }
         }
 
@@ -202,7 +202,6 @@ export default class SiriWave {
 
     /**
      * Clear the space, interpolate values, calculate new steps and draws
-     * @returns
      */
     private startDrawCycle() {
         this._clear();

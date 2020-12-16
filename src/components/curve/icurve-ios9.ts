@@ -1,6 +1,6 @@
 import SiriWave, { ICurve, IiOS9CurveDefinition } from "./curve";
 
-export class CurveIOs9 implements ICurve {
+export class Curve_ios9 implements ICurve {
     ctrl: SiriWave;
     definition: IiOS9CurveDefinition;
 
@@ -206,7 +206,7 @@ export class CurveIOs9 implements ICurve {
     }
 }
 
-export function getDefinition_iOS9(): IiOS9CurveDefinition[] {
+export function getDefaultCurves(): IiOS9CurveDefinition[] {
     return [
         {
             color: "255,255,255",

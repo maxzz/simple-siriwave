@@ -1,6 +1,6 @@
 import SiriWave, { IClassicCurveDefinition, ICurve } from "./curve";
 
-export class ClassicCurve implements ICurve {
+export class Curve_ios8 implements ICurve {
     ctrl: SiriWave;
     definition: IClassicCurveDefinition;
     ATT_FACTOR = 4;
@@ -49,7 +49,7 @@ export class ClassicCurve implements ICurve {
     }
 }
 
-export function getDefinition_Classic(): IClassicCurveDefinition[] {
+export function getDefaultCurves(): IClassicCurveDefinition[] {
     return [
         {
             attenuation: -2,
